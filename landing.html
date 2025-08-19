@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studigo - Dari Pelajar, Untuk Pelajar</title>
-    <link rel="icon" type="image/png" href="http://landingpage.com/Andhika//logo_studigo/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="http://landingpage.com/Andhika//logo_studigo/favicon.svg" />
-    <link rel="shortcut icon" href="http://landingpage.com/Andhika//logo_studigo/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="http://landingpage.com/Andhika//logo_studigo/apple-touch-icon.png" />
-    <link rel="manifest" href="http://landingpage.com/Andhika//logo_studigo/site.webmanifest" />
+    <link rel="icon" type="image/png" href="http://landingpage.com/Studigo//logo_studigo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="http://landingpage.com/Studigo//logo_studigo/favicon.svg" />
+    <link rel="shortcut icon" href="http://landingpage.com/Studigo//logo_studigo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="http://landingpage.com/Studigo//logo_studigo/apple-touch-icon.png" />
+    <link rel="manifest" href="http://landingpage.com/Studigo//logo_studigo/site.webmanifest" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="landing.css">
 </head>
@@ -551,17 +551,29 @@
         const navLinks = document.querySelector('.nav-links');
 
         mobileMenuBtn.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            navLinks.style.position = 'absolute';
-            navLinks.style.top = '100%';
-            navLinks.style.left = '0';
-            navLinks.style.right = '0';
-            navLinks.style.background = 'rgba(255, 255, 255, 0.98)';
-            navLinks.style.backdropFilter = 'blur(10px)';
-            navLinks.style.flexDirection = 'column';
-            navLinks.style.padding = '1rem';
-            navLinks.style.boxShadow = '0 8px 25px rgba(5,150,105,0.1)';
-            navLinks.style.borderRadius = '0 0 16px 16px';
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(255, 255, 255, 0.98)';
+                navLinks.style.backdropFilter = 'blur(10px)';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.padding = '1rem';
+                navLinks.style.boxShadow = '0 8px 25px rgba(5,150,105,0.1)';
+                navLinks.style.borderRadius = '0 0 16px 16px';
+                navLinks.style.zIndex = '999';
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!document.querySelector('.navbar').contains(e.target)) {
+                navLinks.style.display = 'none';
+            }
         });
 
         // Animate elements on scroll
@@ -741,29 +753,37 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const tagline = document.querySelector('.hero-tagline');
-                typeWriter(tagline, 'DARI PELAJAR, UNTUK PELAJAR', 100);
+                if (tagline) {
+                    typeWriter(tagline, 'DARI PELAJAR, UNTUK PELAJAR', 100);
+                }
             }, 1200);
         });
 
         // Add subtle parallax effect to hero section
         window.addEventListener('scroll', () => {
             const hero = document.querySelector('.hero');
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.2;
-            
-            if (scrolled < hero.offsetHeight) {
-                hero.style.transform = `translateY(${rate}px)`;
+            if (hero) {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.2;
+                
+                if (scrolled < hero.offsetHeight) {
+                    hero.style.transform = `translateY(${rate}px)`;
+                }
             }
         });
 
         // Add hover effects to cards
         document.querySelectorAll('.service-card, .feature-item, .pricing-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-15px) scale(1.02)';
+                if (window.innerWidth > 768) {
+                    this.style.transform = 'translateY(-15px) scale(1.02)';
+                }
             });
             
             card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
+                if (window.innerWidth > 768) {
+                    this.style.transform = 'translateY(0) scale(1)';
+                }
             });
         });
 
@@ -815,13 +835,37 @@
             // Add hover sound effect simulation
             dropdownOptions.forEach(option => {
                 option.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateX(5px)';
+                    if (window.innerWidth > 768) {
+                        this.style.transform = 'translateX(5px)';
+                    }
                 });
                 
                 option.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateX(0)';
                 });
             });
+        });
+
+        // Prevent horizontal scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure no element causes horizontal scroll
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach(el => {
+                if (el.scrollWidth > document.documentElement.clientWidth) {
+                    el.style.maxWidth = '100%';
+                    el.style.overflowX = 'hidden';
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Close mobile menu on resize
+            if (window.innerWidth > 768) {
+                navLinks.style.display = 'flex';
+            } else {
+                navLinks.style.display = 'none';
+            }
         });
     </script>
 </body>
